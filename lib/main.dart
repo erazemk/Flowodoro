@@ -1,3 +1,7 @@
+import 'package:flowodoro/pages/statistics_page.dart';
+import 'package:flowodoro/pages/stopwatch_page.dart';
+import 'package:flowodoro/pages/timer_page.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,54 +18,51 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: const MyHomePage(title: 'Flowodoro'),
+      home: const MainPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class _MainPageState extends State<MainPage> {
+  int currentIndex = 0;
+  final pages = [
+    const StopwatchPage(),
+    const TimerPage(),
+    const StatisticsPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+        appBar: AppBar(
+          title: const Text('Flowodoro'),
+        ),
+        body: pages[currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (index) => setState(() => currentIndex = index),
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.timer),
+              label: 'Stopwatch',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage('assets/timer-sand.png')),
+              label: 'Timer',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.timeline),
+              label: 'Statistics',
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        ));
   }
 }
